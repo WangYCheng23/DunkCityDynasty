@@ -16,24 +16,9 @@ class RandomAgent():
 def main():
     # env config
     # --- win env
-    config = {
-        'id': 1,
-        'env_setting': 'win',
-        'client_path': 'path-to-game-client',
-        'rl_server_ip': '127.0.0.1',
-        'rl_server_port': 42636,
-        'game_server_ip': '127.0.0.1',
-        'game_server_port': 18000,
-        'machine_server_ip': '',
-        'machine_server_port': 0,
-        'user_name': 'xxxx',
-        'episode_horizon': 100000
-    }
-
-    # --- linux env
     # config = {
     #     'id': 1,
-    #     'env_setting': 'linux',
+    #     'env_setting': 'win',
     #     'client_path': 'path-to-game-client',
     #     'rl_server_ip': '127.0.0.1',
     #     'rl_server_port': 42636,
@@ -44,6 +29,21 @@ def main():
     #     'user_name': 'xxxx',
     #     'episode_horizon': 100000
     # }
+
+    # --- linux env
+    config = {
+        'id': 1,
+        'env_setting': 'linux',
+        'client_path': '/home/game_package_release/Lx33.exe',
+        'rl_server_ip': '127.0.0.1',
+        'rl_server_port': 42636,
+        'game_server_ip': '121.40.214.152',
+        'game_server_port': 18001,
+        'machine_server_ip': '',
+        'machine_server_port': 0,
+        'user_name': 'xxxx',
+        'episode_horizon': 100000
+    }
 
     # # --- multi_machine
     # config = {
