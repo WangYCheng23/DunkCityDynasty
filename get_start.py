@@ -41,7 +41,7 @@ def main():
         'game_server_port': 18001,
         'machine_server_ip': '',
         'machine_server_port': 0,
-        'user_name': 'xxxx',
+        'user_name': 'qmx4pp2y9ujb5',
         'episode_horizon': 100000
     }
 
@@ -62,8 +62,8 @@ def main():
 
     env = GymEnv(config)
     agent = RandomAgent()
-    user_name = "xxxxx"
-    states, infos = env.reset(user_name = user_name, render = True)
+    user_name = "qmx4pp2y9ujb5"
+    states, infos = env.reset(user_name = user_name, render = False)
     while True:
         actions = agent.get_actions(states)
         states, rewards, dones, truncated, infos = env.step(actions)
