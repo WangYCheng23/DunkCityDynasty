@@ -34,7 +34,7 @@ def main():
     config = {
         'id': 1,
         'env_setting': 'linux',
-        'client_path': '/home/game_package_release/',
+        'client_path': '/home/wangc/Documents/work/Dunk_City_Dynasty/game_package_release/',
         'rl_server_ip': '127.0.0.1',
         'rl_server_port': 42636,
         'game_server_ip': '121.40.214.152',
@@ -63,7 +63,7 @@ def main():
     env = GymEnv(config)
     agent = RandomAgent()
     user_name = "qmx4pp2y9ujb5"
-    states, infos = env.reset(user_name = user_name, render = True)
+    states, infos = env.reset(user_name = user_name, render = False)
     while True:
         actions = agent.get_actions(states)
         states, rewards, dones, truncated, infos = env.step(actions)

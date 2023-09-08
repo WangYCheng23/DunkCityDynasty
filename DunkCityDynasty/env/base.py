@@ -286,7 +286,7 @@ class BaseEnv():
         self.tcp_server.shutdown()
         self.tcp_server.server_close()
 
-    def _wait_for_state(self, min_player=0, timeout=60):
+    def _wait_for_state(self, min_player=0, timeout=120):
         """wait the fixed time to accept env state
         """
         states = {}
