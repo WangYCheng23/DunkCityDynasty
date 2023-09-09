@@ -1,6 +1,9 @@
+import os
+from pathlib import Path
 import time
 import random
 import numpy as np
+from DunkCityDynasty.utils.config import readParser
 
 from DunkCityDynasty.env.gym_env import GymEnv
 
@@ -31,19 +34,19 @@ def main():
     # }
 
     # --- linux env
-    config = {
-        'id': 1,
-        'env_setting': 'linux',
-        'client_path': '/home/wangc/Documents/work/Dunk_City_Dynasty/game_package_release/',
-        'rl_server_ip': '127.0.0.1',
-        'rl_server_port': 42636,
-        'game_server_ip': '121.40.214.152',
-        'game_server_port': 18001,
-        'machine_server_ip': '',
-        'machine_server_port': 0,
-        'user_name': 'qmx4pp2y9ujb5',
-        'episode_horizon': 100000
-    }
+    # config = {
+    #     'id': 1,
+    #     'env_setting': 'linux',
+    #     'client_path': os.path.join(Path(__file__).parent.parent.resolve(), 'game_package_release'),
+    #     'rl_server_ip': '127.0.0.1',
+    #     'rl_server_port': 42636,
+    #     'game_server_ip': '121.40.214.152',
+    #     'game_server_port': 18001,
+    #     'machine_server_ip': '',
+    #     'machine_server_port': 0,
+    #     'user_name': 'qmx4pp2y9ujb5',
+    #     'episode_horizon': 100000
+    # }
 
     # # --- multi_machine
     # config = {
@@ -60,6 +63,9 @@ def main():
     #     'episode_horizon': 100000
     # }
 
+    config = readParser()
+    config['id'] = 0
+    
     env = GymEnv(config)
     agent = RandomAgent()
     user_name = "qmx4pp2y9ujb5"
