@@ -8,19 +8,20 @@ from Utils.config import readParser
 from DunkCityDynasty.env.gym_env import GymEnv
 from Agents.random_agent import RandomAgent
 
-ray.init(num_cpus=8, num_gpus=2, local_mode=True)
+ray.init(num_cpus=2, num_gpus=1, local_mode=False)
     
-@ray.remote(num_cpus=1)
+@ray.remote(num_cpus=1,num_gpus=0.5)
 class Worker:
     def __init__(self, id, params):
         params['id'] = id
-        params['xvfb_display'] = id
+        params['xvfb_display'] = id+5
+        params['rl_server_port'] = params['rl_server_ports'][params['id']]
         self.batch_size = params['batch_size']
         self.ctx_size = params['ctx_size']
         self.dtype = params['dtype']
         self.env = GymEnv(params)
-        # self.d_obs = self.env.observation_space.shape[0]
-        # self.d_act = self.env.action_space.shape[0]
+        self.d_obs = self.env.observation_space.shape[0]
+        self.d_act = self.env.action_space.shape[0]
         # self.low = self.env.action_space.low
         # self.high = self.env.action_space.high
         # 用于决策的神经网络
@@ -137,7 +138,7 @@ def run_parallel():
     n_workers = params['n_workers']
 
     # 初始化worker
-    workers = [Worker.remote(id, params) for id in range(n_workers)]
+    workers = [Worker.options(name=f'worker-{id}',get_if_exists=True).remote(id, params) for id in range(n_workers)]
     # avg_weight = ray.get(workers[0].get_weights.remote())
     d_obs, d_act = ray.get(workers[0].get_info_dims.remote())
     ray.get([worker.reset_initialize.remote() for worker in workers])

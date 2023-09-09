@@ -1,6 +1,7 @@
 import argparse
 import os
 from pathlib import Path
+import numpy as np
 
 import torch
 
@@ -9,9 +10,9 @@ def readParser():
     
     # Env Configuration
     parser.add_argument('--env_setting',default='linux')
-    parser.add_argument('--client_path',default=os.path.join(Path(__file__).parent.parent.resolve(), 'game_package_release'))
+    parser.add_argument('--client_path',default=os.path.join(Path(__file__).parent.parent.parent.resolve(), 'game_package_release'))
     parser.add_argument('--rl_server_ip',default='127.0.0.1')
-    parser.add_argument('--rl_server_port',default=42636)
+    parser.add_argument('--rl_server_ports',default=np.random.choice(list(range(1000,10000)),2,replace=False))
     parser.add_argument('--game_server_ip',default='121.40.214.152')
     parser.add_argument('--game_server_port',default=18001)
     parser.add_argument('--machine_server_ip',default="")
@@ -24,7 +25,8 @@ def readParser():
     parser.add_argument('--ctx_size',default=8), 
     parser.add_argument('--lr',default=5e-4), 
     parser.add_argument('--n_episodes',default=99999999), 
-    parser.add_argument('--n_workers',default=8), 
+    parser.add_argument('--n_workers',default=2),
+    parser.add_argument('--pids',default=np.random.choice(list(range(2000,9000)),2,replace=False))
     parser.add_argument('--rollout_steps',default=128), 
     parser.add_argument('--dtype',default=torch.float32) 
     

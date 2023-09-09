@@ -29,7 +29,7 @@ class BaseEnv():
         self.game_server_ip = config['game_server_ip']
         self.game_server_port = config['game_server_port']
         self.user_name = config['user_name']
-        self.pid = -1 if config['pid']==None else config['pid'] # game client pid
+        self.pid = -1 # game client pid
         self.last_states = None # last states
 
         if self.env_setting == 'linux':
@@ -56,10 +56,13 @@ class BaseEnv():
         if self.env_setting == 'linux':
             self.use_xvfb = True 
             self._start_virtual_desktop()
-            if os.environ.get('DISPLAY'):
-                self.use_xvfb = False
-                
-        print(f"env{self.id} has been settled, pid:{self.game_pid}")
+            # if os.environ.get('DISPLAY'):
+            #     self.use_xvfb = False
+        print("==================================================")        
+        print(f"env{self.id} has been settled, pid:{self.pid}")
+        print(f"rl_sever_ip: {self.rl_server_ip}, rl_sever_port:{self.rl_server_port}")
+        print(f"game_sever_ip: {self.game_server_ip}, game_sever_port:{self.game_server_port}")
+        print("==================================================") 
 
     def reset(self, user_name = None, render = True):
         """reset func
