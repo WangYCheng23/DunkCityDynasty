@@ -5,7 +5,7 @@ from glob import glob
 
 def get_file_names(dir_path):
     '''get all file names in the dir_path'''
-    file_names = glob(dir_path + '/*/*.json')
+    file_names = glob(dir_path + '/*/*.jsonl')
     file_names = [file_name.replace('\\','/') for file_name in file_names]
     return file_names
 

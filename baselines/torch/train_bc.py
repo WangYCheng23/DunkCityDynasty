@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import torch
 import torch.nn as nn
@@ -54,18 +55,25 @@ class Policy(nn.Module):
     
 if __name__ == '__main__':
     
-    human_data_dir = "./human_data"
+    human_data_dir = os.path.join(os.getcwd(),"human_data/L33_RELEASE")
     TOTAL_DIRS = [
-        "DATA_RELEASE_NEW_HANDLED0",
-        "DATA_RELEASE_NEW_HANDLED1",
-        "DATA_RELEASE_NEW_HANDLED2",
+        "DATA_RELEASE_0",
+        "DATA_RELEASE_1",
+        "DATA_RELEASE_2",
+        "DATA_RELEASE_3",
+        "DATA_RELEASE_4",
+        "DATA_RELEASE_5",
+        "DATA_RELEASE_6",
+        "DATA_RELEASE_7",
+        "DATA_RELEASE_8",
+        "DATA_RELEASE_9",
     ]
     file_pointers = []
     for dir_name in TOTAL_DIRS:
         dir_name = f"{human_data_dir}/{dir_name}"
         file_names = get_file_names(dir_name)
         file_pointers += file_names
-    tb_writer = SummaryWriter(f"./output/logs/")
+    tb_writer = SummaryWriter(f"./output/bc/logs/")
     wrapper = BCWrapper({})
     policy = Policy()
     num_epochs = 100000
@@ -78,6 +86,6 @@ if __name__ == '__main__':
                 tb_writer.add_scalar('acc', acc, epoch)
             if epoch % 2000 == 0:
                 print(f"epoch:{epoch},loss:{loss},acc:{acc}")
-                policy.save_model(f"./output/bc_model")
+                policy.save_model(f"./output/bc/bc_model")
         except:
             pass

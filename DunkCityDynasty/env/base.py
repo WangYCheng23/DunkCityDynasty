@@ -59,7 +59,7 @@ class BaseEnv():
             # if os.environ.get('DISPLAY'):
             #     self.use_xvfb = False
         print("==================================================")        
-        print(f"env{self.id} has been settled, pid:{self.pid}")
+        print(f"env{self.id} has been settled, pid:{self.pid}, display:{self.xvfb_display}")
         print(f"rl_sever_ip: {self.rl_server_ip}, rl_sever_port:{self.rl_server_port}")
         print(f"game_sever_ip: {self.game_server_ip}, game_sever_port:{self.game_server_port}")
         print("==================================================") 
@@ -67,6 +67,7 @@ class BaseEnv():
     def reset(self, user_name = None, render = True):
         """reset func
         """
+        print("reset the Dunk City Dynasty game!")
         # reset user name
         if user_name is not None: self.user_name = user_name
 
@@ -155,6 +156,7 @@ class BaseEnv():
         # done via step cnt
         if self.step_cnt >= self.episode_horizon:
             done = True
+            print("Step done, game finished!")
             # close game client and tcp server
             self._close_all()
 
@@ -165,6 +167,7 @@ class BaseEnv():
             if states[key][1]['global_state']['match_remain_time'] < 0.2:
                 truncated["__all__"] = True
                 done = True
+                print("Time done, game finished!")
                 # close game client and tcp server
                 self._close_all()
 
@@ -226,7 +229,7 @@ class BaseEnv():
         # start tcp server
         self._start_tcp_server()
         # start game client
-        self.game_pid = self._start_client()
+        self._start_client()
 
     def _close_all(self):
         '''close game client and tcp server
@@ -303,14 +306,21 @@ class BaseEnv():
                     self.stream_data[i]['state'] = None
             if len(states) > min_player:
                 self.last_states = states
+                print(f"Finished receiving states at step:{self.step_cnt}")
                 return states
 
             # sleep
             sleep(0.001)
             wait_cnt += 0.001
             if not self._check_client() or wait_cnt > timeout: # game client is closed or timeout
+                print("*"*25)
+                print("close client")
+                print("*"*25)
                 self._close_client()
                 self.stream_data['done'] = True
+                print("*"*25)
+                print("close tcp server")
+                print("*"*25)
                 self._close_tcp_server()
                 return None
             

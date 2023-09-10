@@ -11,6 +11,7 @@ from torch.utils.tensorboard import SummaryWriter
 from model import Model
 from wrappers import RLWrapper
 from DunkCityDynasty.env.gym_env import GymEnv
+from Utils.config import readParser
 
 class Policy(nn.Module):
     def __init__(self) -> None:
@@ -92,7 +93,7 @@ class Policy(nn.Module):
                     stats_recorder.add_policy_loss(tot_loss.item(), self.update_step)
                     stats_recorder.add_value_loss(critic_loss.item(),  self.update_step)
                     if self.update_step % 100 == 0:
-                        self.save_model('./output/model', self.update_step)
+                        self.save_model('./output/rl_ppo/model', self.update_step)
 
 class Exp:
     def __init__(self, **kwargs) -> None:
@@ -130,7 +131,7 @@ class StatsRecorder:
         self.writters = {}
         self.writter_types = ['interact','policy']
         for writter_type in self.writter_types: 
-            self.writters[writter_type] = SummaryWriter(f'./output/logs/{writter_type}')
+            self.writters[writter_type] = SummaryWriter(f'./output/rl_ppo/logs/{writter_type}')
     def add_scalar(self, tag, scalar_value, global_step):
         for writter_type in self.writter_types: 
             self.writters['interact'].add_scalar(tag=tag, scalar_value=scalar_value, global_step = global_step)
@@ -143,20 +144,9 @@ class StatsRecorder:
         self.writters['policy'].add_scalar(tag=f'loss/value_loss', scalar_value = loss, global_step = ep_cnt)
 
 def create_env(id=1):
-    config = {
-        'id': id,
-        'env_setting': 'win',
-        'client_path': 'game_package_release',
-        'rl_server_ip': '127.0.0.1',
-        'rl_server_port': 12345,
-        'game_server_ip': 'xxx.xxx.xxx.xxx',
-        'game_server_port': 00000,
-        'machine_server_ip': '',
-        'machine_server_port': 0,
-        "user_name": "username",
-        'episode_horizon': 100000,
-        'render': True,
-    }
+    config = readParser()
+    config['id'] = id
+    config['rl_server_port'] = 4567
     wrapper = RLWrapper({})
     env = GymEnv(config, wrapper=wrapper)
     return env
@@ -214,4 +204,4 @@ if __name__ == '__main__':
     policy = Policy()
     stats_recorder = StatsRecorder()
     train(env, policy, stats_recorder=stats_recorder)
-    # test(env, policy)
+    test(env, policy)

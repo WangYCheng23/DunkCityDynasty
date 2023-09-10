@@ -1,6 +1,6 @@
 ### Python template
 __pycache__/
-human_data
+human_data/
 rlsdk_logs/
 others/
 game_package_opensource
@@ -9,3 +9,4 @@ ray_results
 .vscode
 output
 test.py
+output
