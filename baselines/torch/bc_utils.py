@@ -3,9 +3,9 @@ import random
 import numpy as np
 from glob import glob
 
-def get_file_names(dir_path):
+def get_file_names(dir_path, player_id):
     '''get all file names in the dir_path'''
-    file_names = glob(dir_path + '/*/*.jsonl')
+    file_names = glob(dir_path + f'/{player_id}/*.jsonl')
     file_names = [file_name.replace('\\','/') for file_name in file_names]
     return file_names
 
@@ -49,7 +49,7 @@ def convert_to_batch(sa_traj,wrapper):
     return states_batch, action_batch
 
 def sample_batch(file_pointers,wrapper):
-    file_paths = random.sample(file_pointers, 3)
+    file_paths = random.sample(file_pointers, 256)
     actions = []
     global_state_batch = []
     self_state_batch = []
