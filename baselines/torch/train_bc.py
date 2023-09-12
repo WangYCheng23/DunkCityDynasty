@@ -1,5 +1,6 @@
 import os
 import numpy as np
+from datetime import date
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -15,7 +16,7 @@ class Policy(nn.Module):
         super().__init__()
         self.device =  torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
         self.model = Model().to('cpu')
-        self.load_model(os.path.join(os.getcwd(),"submissions/bc_baseline/bc_model"))
+        self.load_model(os.path.join(os.getcwd(),"output/bc/bc_model"))
         self.update_step = 0
         
     def sample_action(self, states):
@@ -65,7 +66,8 @@ class Policy(nn.Module):
         return loss.item(), acc
     
 if __name__ == '__main__':
-    
+    today = date.today()
+    date_str = today.strftime("%Y-%m-%d")
     human_data_dir = os.path.join(os.getcwd(),"human_data/L33_RELEASE")
     PLAYER_IDS = [101010001,101010002,101010003,101010009,101010082]
     TOTAL_DIRS = [
@@ -73,7 +75,7 @@ if __name__ == '__main__':
         "DATA_RELEASE_1",
         "DATA_RELEASE_2",
         "DATA_RELEASE_3",
-        # "DATA_RELEASE_4",
+        "DATA_RELEASE_4",
         # "DATA_RELEASE_5",
         # "DATA_RELEASE_6",
         # "DATA_RELEASE_7",
@@ -88,7 +90,7 @@ if __name__ == '__main__':
     tb_writer = SummaryWriter(os.path.join(os.getcwd(),f"output/bc/logs/"))
     wrapper = BCWrapper({})
     policy = Policy()
-    num_epochs = 100000
+    num_epochs = 1000000
     for epoch in range(num_epochs):
         try: # avoid file read error
             states_batch, action_batch = sample_batch(file_pointers,wrapper)
@@ -98,7 +100,7 @@ if __name__ == '__main__':
                 tb_writer.add_scalar('loss', loss, epoch)
                 tb_writer.add_scalar('acc', acc, epoch)
             if epoch % 2000 == 0:
-                policy.save_model(os.path.join(os.getcwd(),"output/bc/bc_model"))
+                policy.save_model(os.path.join(os.getcwd(),f"output/bc/bc_model-{date_str}"))
         except:
             print("error!")
             pass
